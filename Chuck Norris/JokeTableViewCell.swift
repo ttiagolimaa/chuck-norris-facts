@@ -43,6 +43,12 @@ class JokeTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private var containerJokeCategories: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private var jokeDebug: Any?
     
     public func setJoke(joke:Joke){
@@ -53,12 +59,12 @@ class JokeTableViewCell: UITableViewCell {
             let label = JokeCategorieLabel()
             label.text = "uncategorized"
             
-            containerView.addSubview(label)
+            containerJokeCategories.addSubview(label)
             
             NSLayoutConstraint.activate([
-                label.topAnchor.constraint(equalTo: jokeLabel.bottomAnchor,constant: 10),
-                label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-                label.leadingAnchor.constraint(equalTo: jokeLabel.leadingAnchor)
+                label.topAnchor.constraint(equalTo: containerJokeCategories.topAnchor),
+                label.bottomAnchor.constraint(equalTo: containerJokeCategories.bottomAnchor),
+                label.leadingAnchor.constraint(equalTo: containerJokeCategories.leadingAnchor)
             ])
             
             
@@ -70,12 +76,12 @@ class JokeTableViewCell: UITableViewCell {
                 let label = JokeCategorieLabel()
                 label.text = joke.categories[i]
                 
-                containerView.addSubview(label)
+                containerJokeCategories.addSubview(label)
                 
                 NSLayoutConstraint.activate([
-                    label.topAnchor.constraint(equalTo: jokeLabel.bottomAnchor,constant: 10),
-                    label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-                    label.leadingAnchor.constraint(equalTo: jokeLabel.leadingAnchor, constant: widthUsed)
+                    label.topAnchor.constraint(equalTo: containerJokeCategories.topAnchor),
+                    label.bottomAnchor.constraint(equalTo: containerJokeCategories.bottomAnchor),
+                    label.leadingAnchor.constraint(equalTo: containerJokeCategories.leadingAnchor, constant: widthUsed)
                 ])
                 
                 widthUsed += label.intrinsicContentSize.width + 8
@@ -89,6 +95,7 @@ class JokeTableViewCell: UITableViewCell {
         
         containerView.addSubview(jokeLabel)
         containerView.addSubview(shareIcon)
+        containerView.addSubview(containerJokeCategories)
         
         contentView.addSubview(containerView)
         
@@ -102,6 +109,10 @@ class JokeTableViewCell: UITableViewCell {
             jokeLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             jokeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             
+            containerJokeCategories.topAnchor.constraint(equalTo: jokeLabel.bottomAnchor,constant: 10),
+            containerJokeCategories.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,constant: -10),
+            containerJokeCategories.leadingAnchor.constraint(equalTo: jokeLabel.leadingAnchor),
+            
             shareIcon.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             shareIcon.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,constant: -10),
             shareIcon.heightAnchor.constraint(equalToConstant: 30),
@@ -111,5 +122,11 @@ class JokeTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        for categorieLabel in containerJokeCategories.subviews {
+            categorieLabel.removeFromSuperview()
+        }
     }
 }
