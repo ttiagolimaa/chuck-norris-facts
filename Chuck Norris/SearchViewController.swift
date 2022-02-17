@@ -70,13 +70,12 @@ class SearchViewController: UIViewController {
         searchController.searchBar.placeholder = "Search Joke"
         navigationItem.searchController = searchController
         definesPresentationContext = true
-        
-        searchController.searchBar.setShowsScope(true, animated: true)
-        view.setNeedsLayout()
+                
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         searchTableView.dataSource = self
         searchTableView.delegate = self
-        
+                
         view.addSubview(searchTableView)
         view.addSubview(activeIndicator)
         
@@ -119,7 +118,7 @@ class SearchViewController: UIViewController {
     }
     
     @objc func trySearchAgain(){
-        
+        print("__________________FOI")
         
     }
     
